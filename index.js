@@ -8,12 +8,21 @@ const { Connection, PublicKey, clusterApiUrl } = require("@solana/web3.js");
 require("dotenv").config();
 
 const app = express();
+
+// ✅ Middleware
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
-app.use(session({ secret: "solapaysecret", resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: "solapaysecret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ✅ Passport config
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
 
@@ -48,7 +57,7 @@ app.get("/api/balance/:wallet", async (req, res) => {
   try {
     const wallet = new PublicKey(req.params.wallet);
     const balance = await connection.getBalance(wallet);
-    res.json({ balance: balance / 1e9 });
+    res.json({ balance: balance / 1e9 }); // convert lamports to SOL
   } catch (err) {
     res.status(400).json({ error: "Invalid wallet address" });
   }
@@ -58,7 +67,11 @@ app.get("/api/balance/:wallet", async (req, res) => {
 app.get("/api/tx/:signature", async (req, res) => {
   try {
     const tx = await connection.getConfirmedTransaction(req.params.signature);
-    res.json({ confirmed: !!tx, tx });
+    if (tx) {
+      res.json({ confirmed: true, tx });
+    } else {
+      res.json({ confirmed: false });
+    }
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch transaction" });
   }
@@ -69,8 +82,10 @@ app.get("/", (req, res) => {
   res.send("SolaPay backend is running 🚀");
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
+
 
