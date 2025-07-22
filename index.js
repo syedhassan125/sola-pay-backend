@@ -39,7 +39,8 @@ app.get("/api/tx/:signature", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+// ✅ Use Render-assigned PORT (required for public access)
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
