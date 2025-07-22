@@ -56,8 +56,7 @@ app.get("/", (req, res) => {
   res.send("SolaPay backend is running 🚀");
 });
 
-// Server
-const PORT = process.env.PORT || 5000;
+// Servconst PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
@@ -65,9 +64,7 @@ const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const jwt = require("jsonwebtoken");
-const {
+const GoogleStrategy = require("p
   Connection,
   PublicKey,
   clusterApiUrl,
@@ -144,10 +141,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
-const express = require("express");
-const cors = require("cors");
-const { Connection, PublicKey, clusterApiUrl } = require("@solana/web3.js");
-require("dotenv").config();
 
 const app = express();
 app.use(cors({ origin: process.env.FRONTEND_URL }));
