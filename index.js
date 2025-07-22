@@ -12,13 +12,7 @@ const app = express();
 // ✅ Middleware
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
-app.use(
-  session({
-    secret: "solapaysecret",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+app.use(session({ secret: "solapaysecret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -87,5 +81,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
+
 
 
