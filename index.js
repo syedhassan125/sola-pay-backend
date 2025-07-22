@@ -12,6 +12,20 @@ const app = express();
 // ✅ Middleware
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
+app.use(
+    session({
+      secret: "solapaysecret",
+      resave: false,
+      saveUninitialized: true,
+    })
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  // Passport config
+  passport.serializeUser((user, done) => done(null, user));
+  passport.deserializeUser((obj, done) => done(null, obj));
+  
 passport.use(
   new GoogleStrategy(
     {
