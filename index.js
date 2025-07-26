@@ -43,13 +43,16 @@ passport.use(
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    const token = jwt.sign({ user: req.user }, "jwt-secret", { expiresIn: "1d" });
-    res.redirect(`${process.env.FRONTEND_URL}/auth-success?token=${token}`);
-  }
+ "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: process.env.FRONTEND_URL,
+    failureRedirect: "/auth/failure",
+  })
 );
+
+app.get("/auth/failure", (req, res) => {
+  res.send("Login failed. Please try again.");
+});
 
 // ✅ Wallet balance route
 const connection = new Connection(clusterApiUrl("mainnet-beta"));
